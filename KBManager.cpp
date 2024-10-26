@@ -9,18 +9,15 @@
 #define WAIT_US 50000
 
 KBManager::KBManager(KBInterface* intf) {
-    this->running = true;
+    this->running = false;
     this->intf = intf;
 
     this->onBrightness = 0xFF;
     this->targetBrightness = this->onBrightness;
     this->setBrightness = this->intf->getRGBBrightness();
-
-    this->start();
 }
 
 KBManager::~KBManager() {
-    this->running = false;
     this->wait();
 }
 
@@ -34,38 +31,42 @@ void KBManager::run() {
     uint64_t time_us;
     uint64_t time_us2;
 
-    while (true) {
-        while (this->setBrightness != this->targetBrightness) {
+    while (this->setBrightness != this->targetBrightness && this->running) {
+        if (this->setBrightness > this->targetBrightness) {
+            this->setBrightness -= INC_STEP;
+            if (this->setBrightness < this->targetBrightness) {
+                this->setBrightness = this->targetBrightness;
+            }
+        } else {
+            this->setBrightness += INC_STEP;
             if (this->setBrightness > this->targetBrightness) {
-                this->setBrightness -= INC_STEP;
-                if (this->setBrightness < this->targetBrightness) {
-                    this->setBrightness = this->targetBrightness;
-                }
-            } else {
-                this->setBrightness += INC_STEP;
-                if (this->setBrightness > this->targetBrightness) {
-                    this->setBrightness = this->targetBrightness;
-                }
+                this->setBrightness = this->targetBrightness;
             }
-
-            GET_TIME_US(time_us);
-            this->intf->setRGBBrightness(this->setBrightness);
-            GET_TIME_US(time_us2);
-            if (time_us2 > time_us) {
-                usleep(INC_US - (time_us2 - time_us));
-                continue;
-            }
-            usleep(INC_US);
         }
 
-        usleep(WAIT_US);
+        GET_TIME_US(time_us);
+        this->intf->setRGBBrightness(this->setBrightness);
+        GET_TIME_US(time_us2);
+        if (time_us2 > time_us) {
+            usleep(INC_US - (time_us2 - time_us));
+            continue;
+        }
+        usleep(INC_US);
     }
 }
 
+void KBManager::setTargetBrightness(const int target) {
+    this->running = false;
+    this->wait();
+    this->targetBrightness = target;
+    this->running = true;
+    this->start();
+}
+
 void KBManager::goWakeup() {
-    this->targetBrightness = this->onBrightness;
+    this->setTargetBrightness(this->onBrightness);
 }
 
 void KBManager::goIdle() {
-    this->targetBrightness = 0;
+    this->setTargetBrightness(0);
 }

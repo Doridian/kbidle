@@ -17,10 +17,11 @@ public:
     void run(void);
 
 private:
-    volatile int targetBrightness;
-    volatile int setBrightness;
+    int targetBrightness;
+    int setBrightness;
+    void setTargetBrightness(const int target);
     
-    volatile int onBrightness;
+    int onBrightness;
     void loadOnBrightness(void);
 
     KBInterface *intf;
