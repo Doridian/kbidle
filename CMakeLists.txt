@@ -7,11 +7,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui)
 find_package(KF6IdleTime REQUIRED)
+find_package(hidapi REQUIRED)
 qt_standard_project_setup()
 
 qt_add_executable(kbdidle
     main.cpp
     KBIdleApp.cpp
+    KBInterface.cpp
 )
 
-target_link_libraries(kbdidle PRIVATE Qt6::Core Qt6::Gui KF6::IdleTime)
+target_link_libraries(kbdidle PRIVATE hidapi-hidraw Qt6::Core Qt6::Gui KF6::IdleTime)
