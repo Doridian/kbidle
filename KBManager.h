@@ -17,6 +17,7 @@ public:
     void run(void);
 
 private:
+    std::mutex setTargerBrightnessMutex;
     int targetBrightness;
     int setBrightness;
     void setTargetBrightness(const int target);

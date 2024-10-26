@@ -56,10 +56,9 @@ void KBManager::run() {
     }
 }
 
-std::mutex setTargerBrightnessMutex;
 
 void KBManager::setTargetBrightness(const int target) {
-    std::lock_guard<std::mutex> guard(setTargerBrightnessMutex);
+    std::lock_guard<std::mutex> guard(this->setTargerBrightnessMutex);
 
     this->running = false;
     this->wait();
