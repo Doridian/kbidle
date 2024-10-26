@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/time.h>
+#include <mutex>
 
 #include "KBManager.h"
 
@@ -55,7 +56,11 @@ void KBManager::run() {
     }
 }
 
+std::mutex setTargerBrightnessMutex;
+
 void KBManager::setTargetBrightness(const int target) {
+    std::lock_guard<std::mutex> guard(setTargerBrightnessMutex);
+
     this->running = false;
     this->wait();
     this->targetBrightness = target;
