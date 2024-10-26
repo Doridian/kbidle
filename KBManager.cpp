@@ -67,15 +67,5 @@ void KBManager::goWakeup() {
 }
 
 void KBManager::goIdle() {
-    if (this->targetBrightness == this->setBrightness &&
-        this->setBrightness == this->onBrightness) {
-        int newOnBrightness = this->intf->getRGBBrightness();
-        if (abs(newOnBrightness - this->onBrightness) > 2) {
-            // This stops the off-by-one errors in the control...
-            this->onBrightness = newOnBrightness;
-            printf("Adjusting onBrightness to %d\n", newOnBrightness);
-        }
-    }
-
     this->targetBrightness = 0;
 }
