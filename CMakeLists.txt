@@ -14,6 +14,7 @@ qt_add_executable(kbdidle
     main.cpp
     KBIdleApp.cpp
     KBInterface.cpp
+    KBManager.cpp
 )
 
 target_link_libraries(kbdidle PRIVATE hidapi-hidraw Qt6::Core Qt6::Gui KF6::IdleTime)

@@ -2,14 +2,14 @@
 
 #include <QObject>
 
-#include "KBInterface.h"
+#include "KBManager.h"
 
 class KBIdleApp : public QObject
 {
     Q_OBJECT
 
 public:
-    KBIdleApp(const int timeout, KBInterface *kb);
+    KBIdleApp(const int timeout, KBManager *mgr);
     ~KBIdleApp() override;
 
 public Q_SLOTS:
@@ -17,5 +17,5 @@ public Q_SLOTS:
     void resumingFromIdle();
 
 protected:
-    KBInterface* kb;
+    KBManager* mgr;
 };

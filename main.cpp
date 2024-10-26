@@ -2,12 +2,12 @@
 
 #include <hidapi/hidapi.h>
 #include "KBInterface.h"
+#include "KBManager.h"
 #include "KBIdleApp.h"
 
 #define QMK_INTERFACE 0x01
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
     if (argc < 2) {
         printf("Usage: %s TIMEOUT_MS\n", argv[0]);
         return 1;
@@ -31,6 +31,8 @@ int main(int argc, char **argv)
         return 1;
     }
 
+    printf("Opening %s\n", info->path);
+
     hid_device* handle = hid_open_path(info->path);
     if (!handle) {
         printf("Could not open keyboard!\n");
@@ -38,7 +40,9 @@ int main(int argc, char **argv)
     }
 
     KBInterface kb(handle);
+    KBManager mgr(&kb);
+
     QGuiApplication app(argc, argv);
-    KBIdleApp t(timeout, &kb);
+    KBIdleApp t(timeout, &mgr);
     return app.exec();
 }

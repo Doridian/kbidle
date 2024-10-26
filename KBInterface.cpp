@@ -5,8 +5,6 @@
 #include <string.h>
 #include <unistd.h>
 
-#define SAFETY_SLEEP() usleep(1000)
-
 #define RAW_HID_BUFFER_SIZE 32
 
 #define CHANNEL_BACKLIGHT 1
@@ -26,10 +24,6 @@
 
 KBInterface::KBInterface(hid_device* handle) {
     this->handle = handle;
-    this->loadOnBrightness();
-}
-
-KBInterface::~KBInterface() {
 }
 
 int KBInterface::getRGBBrightness() {
@@ -73,37 +67,24 @@ int KBInterface::sendMessage(const unsigned char messageId, const unsigned char*
 
     int res = hid_write(this->handle, data, RAW_HID_BUFFER_SIZE);
     if (res < RAW_HID_BUFFER_SIZE) {
-        printf("Error on hid_write(%d): %ls\n", res, hid_error(this->handle));
+        printf("Error on hid_write: %ls\n", res, hid_error(this->handle));
         return -1;
     }
 
-    if (outBufLen < 4 || outBuf == NULL) {
+    res = hid_read_timeout(this->handle, data, RAW_HID_BUFFER_SIZE, 1000);
+    if (res < RAW_HID_BUFFER_SIZE) {
+        printf("Error on hid_read_timeout: %ls\n", res, hid_error(this->handle));
+        return -1;
+    }
+        
+
+    if (outBufLen < 1 || outBuf == NULL) {
         return 0;
     }
 
-    return hid_read_timeout(this->handle, outBuf, outBufLen, 1000);
-}
-
-void KBInterface::loadOnBrightness() {
-    int res = this->getRGBBrightness();
-    if (res < 0) {
-        printf("Error loading onBrightness\n");
-        return;
+    if (res > outBufLen) {
+        res = outBufLen;
     }
-    this->onBrightness = res;
-    printf("Loaded ON brightness: %i\n", this->onBrightness);
-}
-
-void KBInterface::goWakeup() {
-    SAFETY_SLEEP();
-    this->setRGBBrightness(this->onBrightness);
-    SAFETY_SLEEP();
-}
-
-void KBInterface::goIdle() {
-    SAFETY_SLEEP();
-    this->loadOnBrightness();
-    SAFETY_SLEEP();
-    this->setRGBBrightness(0);
-    SAFETY_SLEEP();
+    memcpy(outBuf, data, res);
+    return res;
 }

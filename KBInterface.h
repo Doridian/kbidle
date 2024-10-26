@@ -6,17 +6,11 @@ class KBInterface
 {
 public:
     KBInterface(hid_device *handle);
-    ~KBInterface();
 
     int getRGBBrightness();
     void setRGBBrightness(const int brightness);
 
-    void goWakeup();
-    void goIdle();
-
 private:
-    int onBrightness;
-    void loadOnBrightness();
 
     int sendMessage(const unsigned char messageId, const unsigned char* msg, const int msgLen, unsigned char* outBuf, const int outLen);
 
