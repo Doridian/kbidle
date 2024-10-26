@@ -10,11 +10,11 @@ find_package(KF6IdleTime REQUIRED)
 find_package(hidapi REQUIRED)
 qt_standard_project_setup()
 
-qt_add_executable(kbdidle
+qt_add_executable(kbidle
     main.cpp
     KBIdleApp.cpp
     KBInterface.cpp
     KBManager.cpp
 )
 
-target_link_libraries(kbdidle PRIVATE hidapi-hidraw Qt6::Core Qt6::Gui KF6::IdleTime)
+target_link_libraries(kbidle PRIVATE hidapi-hidraw Qt6::Core Qt6::Gui KF6::IdleTime)
