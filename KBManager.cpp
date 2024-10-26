@@ -68,8 +68,7 @@ void KBManager::goWakeup() {
 
 void KBManager::goIdle() {
     if (this->targetBrightness == this->setBrightness &&
-        this->setBrightness == this->onBrightness &&
-        !this->isRunning()) {
+        this->setBrightness == this->onBrightness) {
         int newOnBrightness = this->intf->getRGBBrightness();
         if (abs(newOnBrightness - this->onBrightness) > 2) {
             // This stops the off-by-one errors in the control...
