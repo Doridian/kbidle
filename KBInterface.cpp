@@ -5,7 +5,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#define SAFETY_SLEEP() usleep(100000)
+#define SAFETY_SLEEP() usleep(1000)
 
 #define RAW_HID_BUFFER_SIZE 32
 
