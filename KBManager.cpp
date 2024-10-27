@@ -66,12 +66,8 @@ void KBManager::setTargetBrightness(const int target) {
     this->start();
 }
 
-void KBManager::loadOnBrightness() {
+void KBManager::loadCurBrightness() {
     std::lock_guard<std::mutex> guard(this->setTargerBrightnessMutex);
-
-    if (this->running) {
-        return;
-    }
 
     if (this->targetBrightness != this->onBrightness || \
         this->setBrightness != this->onBrightness) {
@@ -82,12 +78,14 @@ void KBManager::loadOnBrightness() {
         return;
     }
 
-    const int newOnBrightness = this->intf->getRGBBrightness();
-    if (newOnBrightness < 0) {
+    const int curBrightness = this->intf->getRGBBrightness();
+    printf("OB: %d\n", curBrightness);
+    if (curBrightness < 0) {
         return;
     }
 
-    this->onBrightness = newOnBrightness;
+    this->setBrightness = curBrightness;
+    this->onBrightness = curBrightness;
 }
 
 void KBManager::goWakeup() {
@@ -95,6 +93,6 @@ void KBManager::goWakeup() {
 }
 
 void KBManager::goIdle() {
-    this->loadOnBrightness();
+    this->loadCurBrightness();
     this->setTargetBrightness(0);
 }

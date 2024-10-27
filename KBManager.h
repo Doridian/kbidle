@@ -23,7 +23,7 @@ private:
     void setTargetBrightness(const int target);
     
     int onBrightness;
-    void loadOnBrightness(void);
+    void loadCurBrightness(void);
 
     KBInterface *intf;
     volatile bool running;
