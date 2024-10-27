@@ -14,8 +14,8 @@ KBManager::KBManager(KBInterface* intf) {
     this->intf = intf;
 
     this->onBrightness = 0xFF;
-    this->targetBrightness = this->onBrightness;
     this->setBrightness = this->intf->getRGBBrightness();
+    this->goWakeup();
 }
 
 KBManager::~KBManager() {
