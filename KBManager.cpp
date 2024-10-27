@@ -79,7 +79,6 @@ void KBManager::loadCurBrightness() {
     }
 
     const int curBrightness = this->intf->getRGBBrightness();
-    printf("OB: %d\n", curBrightness);
     if (curBrightness < 0) {
         return;
     }
