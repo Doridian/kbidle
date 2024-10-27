@@ -66,10 +66,35 @@ void KBManager::setTargetBrightness(const int target) {
     this->start();
 }
 
+void KBManager::loadOnBrightness() {
+    std::lock_guard<std::mutex> guard(this->setTargerBrightnessMutex);
+
+    if (this->running) {
+        return;
+    }
+
+    if (this->targetBrightness != this->onBrightness || \
+        this->setBrightness != this->onBrightness) {
+        return;
+    }
+
+    if (this->isRunning()) {
+        return;
+    }
+
+    const int newOnBrightness = this->intf->getRGBBrightness();
+    if (newOnBrightness < 0) {
+        return;
+    }
+
+    this->onBrightness = newOnBrightness;
+}
+
 void KBManager::goWakeup() {
     this->setTargetBrightness(this->onBrightness);
 }
 
 void KBManager::goIdle() {
+    this->loadOnBrightness();
     this->setTargetBrightness(0);
 }

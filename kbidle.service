@@ -1,0 +1,11 @@
+# User service
+
+[Unit]
+Description=KBIdle
+
+[Service]
+ExecStart=/usr/local/bin/kbidle 60000
+Restart=always
+
+[Install]
+WantedBy=graphical-session.target
