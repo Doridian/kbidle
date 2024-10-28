@@ -88,10 +88,12 @@ void KBManager::loadCurBrightness() {
 }
 
 void KBManager::goWakeup() {
-    this->setTargetBrightness(this->onBrightness);
+    //this->setTargetBrightness(this->onBrightness);
+    this->intf->setRGBBrightness(255);
 }
 
 void KBManager::goIdle() {
-    this->loadCurBrightness();
-    this->setTargetBrightness(0);
+    //this->loadCurBrightness();
+    //this->setTargetBrightness(0);
+    this->intf->setRGBBrightness(0);
 }
