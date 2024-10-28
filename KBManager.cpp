@@ -5,9 +5,8 @@
 
 #include "KBManager.h"
 
-#define INC_STEP 5
-#define INC_US 2000
-#define WAIT_US 50000
+#define INC_STEP 40
+#define INC_US 16000
 
 KBManager::KBManager(KBInterface* intf) {
     this->running = false;
@@ -88,12 +87,10 @@ void KBManager::loadCurBrightness() {
 }
 
 void KBManager::goWakeup() {
-    //this->setTargetBrightness(this->onBrightness);
-    this->intf->setRGBBrightness(255);
+    this->setTargetBrightness(this->onBrightness);
 }
 
 void KBManager::goIdle() {
-    //this->loadCurBrightness();
-    //this->setTargetBrightness(0);
-    this->intf->setRGBBrightness(0);
+    this->loadCurBrightness();
+    this->setTargetBrightness(0);
 }

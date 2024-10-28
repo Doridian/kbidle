@@ -1,0 +1,3 @@
+[submodule "openrgb-cppsdk"]
+	path = openrgb-cppsdk
+	url = https://github.com/Youda008/OpenRGB-cppSDK.git

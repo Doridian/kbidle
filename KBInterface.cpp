@@ -1,10 +1,29 @@
 #include "KBInterface.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
+KBInterface::KBInterface() : client("kbidle") {
+}
 
-KBInterface::KBInterface() {
+int KBInterface::ensureClient() {
+    if (this->client.isConnected()) {
+        return 0;
+    }
+
+    printf("OpenRGB Client connecting...\n");
+
+    orgb::ConnectStatus status = this->client.connect("127.0.0.1");
+    if (status != orgb::ConnectStatus::Success)
+    {
+        printf("Failed to connect to OpenRGB: %s (error code: %d)\n",
+            enumString(status), int(this->client.getLastSystemError()));
+        return -1;
+    }
+
+    this->list = std::move(this->client.requestDeviceListX());
+    this->device = &this->list.findX(orgb::DeviceType::Keyboard);
+
+    printf("OpenRGB Client connected!\n");
+
+    return 0;
 }
 
 int KBInterface::getRGBBrightness() {
@@ -16,9 +35,10 @@ void KBInterface::setRGBBrightness(const int brightness) {
         return;
     }
 
-     if (brightness == 255) {
-        system("openrgb -p Default");
-     } else if (brightness == 0) {
-        system("openrgb -p Off");
-     }
+    if (this->ensureClient() < 0) {
+        return;
+    }
+
+    orgb::Color ourColor(brightness, 0, brightness);
+    this->client.setDeviceColor(*this->device, ourColor);
 }
