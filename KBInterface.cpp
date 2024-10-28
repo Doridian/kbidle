@@ -1,5 +1,7 @@
 #include "KBInterface.h"
 
+#include <stdio.h>
+
 KBInterface::KBInterface() : client("kbidle") {
 }
 
@@ -20,6 +22,9 @@ int KBInterface::ensureClient() {
 
     this->list = std::move(this->client.requestDeviceListX());
     this->device = &this->list.findX(orgb::DeviceType::Keyboard);
+
+    const orgb::Mode& mode = this->device->findModeX("Direct");
+    this->client.changeModeX(*this->device, mode);
 
     printf("OpenRGB Client connected!\n");
 
