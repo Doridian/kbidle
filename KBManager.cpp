@@ -5,8 +5,8 @@
 
 #include "KBManager.h"
 
-#define INC_STEP 5
-#define INC_US 2000
+#define INC_STEP 40
+#define INC_US 16000
 #define WAIT_US 50000
 
 KBManager::KBManager(KBInterface* intf) {
