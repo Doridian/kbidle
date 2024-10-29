@@ -2,15 +2,15 @@
 
 set -euo pipefail
 
-setprofile() {
-	sudo -u nobody /usr/local/bin/kbidle standby
+kbidle() {
+	sudo -u nobody /usr/local/bin/kbidle "$1"
 }
 
 case "$1" in
     pre)
-	/usr/local/bin/kbidle standby
+	    kbidle standby
         ;;
     post)
-	/usr/local/bin/kbidle wakeup
+	    kbidle wakeup
         ;;
 esac
