@@ -11,6 +11,8 @@ public:
 
     int getRGBBrightness();
     void setRGBBrightness(const int brightness);
+    void prepareStandby();
+    void handleWakeup();
 
 private:
     int ensureClient();
@@ -18,4 +20,6 @@ private:
 
     orgb::DeviceList list;
     const orgb::Device* device;
+
+    void configureDevice();
 };

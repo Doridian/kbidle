@@ -3,6 +3,12 @@
 #include <stdio.h>
 
 KBInterface::KBInterface() : client("kbidle") {
+
+}
+
+void KBInterface::configureDevice() {
+    const orgb::Mode& mode = this->device->findModeX("Direct");
+    this->client.changeModeX(*this->device, mode);
 }
 
 int KBInterface::ensureClient() {
@@ -23,12 +29,29 @@ int KBInterface::ensureClient() {
     this->list = std::move(this->client.requestDeviceListX());
     this->device = &this->list.findX(orgb::DeviceType::Keyboard);
 
-    const orgb::Mode& mode = this->device->findModeX("Direct");
-    this->client.changeModeX(*this->device, mode);
+    this->configureDevice();
 
     printf("OpenRGB Client connected!\n");
 
     return 0;
+}
+
+void KBInterface::prepareStandby() {
+    if (this->ensureClient() < 0) {
+        return;
+    }
+
+    this->configureDevice();
+    this->setRGBBrightness(0);
+}
+
+void KBInterface::handleWakeup() {
+    if (this->ensureClient() < 0) {
+        return;
+    }
+
+    this->configureDevice();
+    this->setRGBBrightness(255);
 }
 
 int KBInterface::getRGBBrightness() {

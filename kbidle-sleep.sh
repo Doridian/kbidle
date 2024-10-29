@@ -2,11 +2,15 @@
 
 set -euo pipefail
 
+setprofile() {
+	sudo -u nobody /usr/local/bin/kbidle standby
+}
+
 case "$1" in
     pre)
-        sudo -u doridian openrgb -p Off
+	/usr/local/bin/kbidle standby
         ;;
     post)
-        sudo -u doridian openrgb -p Default
+	/usr/local/bin/kbidle wakeup
         ;;
 esac
