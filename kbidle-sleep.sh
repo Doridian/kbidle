@@ -3,14 +3,14 @@
 set -euo pipefail
 
 kbidle() {
-	sudo -u nobody /usr/local/bin/kbidle "$1"
+    sudo -u nobody /usr/local/bin/kbidle "$1"
 }
 
 case "$1" in
     pre)
-	    kbidle standby
+        kbidle standby
         ;;
     post)
-	    kbidle wakeup
+        kbidle wakeup
         ;;
 esac
