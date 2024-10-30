@@ -7,7 +7,6 @@
 
 #define INC_STEP 40
 #define INC_US 16000
-#define WAIT_US 50000
 
 KBManager::KBManager(KBInterface* intf) {
     this->running = false;
@@ -23,12 +22,12 @@ KBManager::~KBManager() {
 }
 
 #define GET_TIME_US(var) { \
-    gettimeofday(&time, NULL); \
-    var = ((uint64_t)time.tv_sec * 1000000) + (uint64_t)time.tv_usec; \
+    clock_gettime(CLOCK_MONOTONIC, &time); \
+    var = ((uint64_t)time.tv_sec * 1000000) + (uint64_t)(time.tv_nsec / 1000); \
 }
 
 void KBManager::run() {
-    struct timeval time;
+    struct timespec time;
     uint64_t time_us;
     uint64_t time_us2;
 
