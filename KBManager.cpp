@@ -48,14 +48,17 @@ void KBManager::run() {
         GET_TIME_US(time_us);
         this->intf->setRGBBrightness(this->setBrightness);
         GET_TIME_US(time_us2);
-        if (time_us2 > time_us) {
-            time_delta = time_us2 - time_us;
-            if (time_delta < INC_US) {
-                usleep(INC_US - time_delta);
-            }
+
+        if (time_us2 <= time_us) {
+            usleep(INC_US);
             continue;
         }
-        usleep(INC_US);
+
+        time_delta = time_us2 - time_us;
+        if (time_delta >= INC_US) {
+            continue;
+        }
+        usleep(INC_US - time_delta);
     }
 }
 
