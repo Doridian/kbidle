@@ -30,6 +30,7 @@ void KBManager::run() {
     struct timespec time;
     uint64_t time_us;
     uint64_t time_us2;
+    uint64_t time_delta;
 
     while (this->setBrightness != this->targetBrightness && this->running) {
         if (this->setBrightness > this->targetBrightness) {
@@ -48,7 +49,10 @@ void KBManager::run() {
         this->intf->setRGBBrightness(this->setBrightness);
         GET_TIME_US(time_us2);
         if (time_us2 > time_us) {
-            usleep(INC_US - (time_us2 - time_us));
+            time_delta = time_us2 - time_us;
+            if (time_delta < INC_US) {
+                usleep(INC_US - time_delta);
+            }
             continue;
         }
         usleep(INC_US);
