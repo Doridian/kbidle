@@ -4,7 +4,7 @@
 Description=KBIdle
 
 [Service]
-ExecStart=/usr/local/bin/kbidle 60000
+ExecStart=/usr/local/bin/kbidle 10000
 Restart=always
 
 [Install]
